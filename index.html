@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETF Intelligence Platform - Investor Pitch Deck</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            height: 100vh;
+            scroll-snap-align: start;
+            padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        .slide-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #7F0000 0%, #FF3838 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #FF3838 0%, #7F0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .value-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 0.75rem;
+        }
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #FF3838 0%, #7F0000 100%);
+            z-index: 1000;
+            transition: width 0.2s ease;
+            box-shadow: 0 2px 10px rgba(255, 56, 56, 0.3);
+        }
+        .nav-dot {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            background-color: #CBD5E0;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .nav-dot:hover {
+            transform: scale(1.3);
+        }
+        .nav-dot.active {
+            background-color: #FF3838;
+            transform: scale(1.4);
+            box-shadow: 0 0 15px #FF3838;
+        }
+        .nav-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease, right 0.3s ease;
+            pointer-events: none;
+        }
+        .nav-dot:hover::after {
+            opacity: 1;
+            right: 25px;
+        }
+        .nav-dot:nth-child(1)::after { content: 'Home'; }
+        .nav-dot:nth-child(2)::after { content: 'Problem'; }
+        .nav-dot:nth-child(3)::after { content: 'Solution'; }
+        .nav-dot:nth-child(4)::after { content: 'Omnichannel'; }
+        .nav-dot:nth-child(5)::after { content: 'Value'; }
+        .nav-dot:nth-child(6)::after { content: 'Market'; }
+        .nav-dot:nth-child(7)::after { content: 'Investment'; }
+        
+        .highlight-box {
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        .highlight-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .metric-card {
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            transform: scale(1);
+        }
+        .metric-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 10;
+        }
+        .problem-card {
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .solution-feature {
+            border-left: 4px solid #FF3838;
+            transition: all 0.3s ease;
+        }
+        .solution-feature:hover {
+            background-color: #FEF2F2;
+            transform: translateX(5px);
+        }
+        .animated-gradient {
+            background: linear-gradient(-45deg, #7F0000, #FF3838, #7F0000, #FF3838);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .highlight-text {
+            font-weight: 700;
+            color: #FF3838;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #FF3838 0%, #7F0000 100%);
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 10px 15px -3px rgba(255, 56, 56, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -5px rgba(255, 56, 56, 0.4);
+        }
+        .slide-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #FF3838, transparent);
+        }
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        /* Custom scrollbar */
+        .slide-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .slide-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .slide-container::-webkit-scrollbar-thumb {
+            background: #FF3838;
+            border-radius: 4px;
+        }
+        .slide-container::-webkit-scrollbar-thumb:hover {
+            background: #7F0000;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <nav class="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 flex flex-col" id="navigation" aria-label="Slide Navigation"></nav>
+
+    <main class="slide-container" id="slideContainer" tabindex="0">
+        <!-- Slide 1: Hero -->
+        <section class="slide animated-gradient flex flex-col justify-center items-center text-white" id="slide1">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="mb-8 relative inline-block">
+                    <i class="fas fa-chart-line text-6xl mb-4 bounce"></i>
+                </div>
+                <h1 class="text-6xl font-extrabold mb-6 tracking-tight">ETF Intelligence Platform</h1>
+                <div class="h-1 w-24 bg-white mx-auto mb-8 rounded"></div>
+                <p class="text-2xl mb-4 font-light">AI-Powered Market Intelligence & Compliance</p>
+                <p class="text-2xl mb-12 font-light">Seamless Omnichannel Client Touchpoints</p>
+                <div class="flex justify-center">
+                    <div class="btn-primary text-lg">
+                        <i class="fas fa-layer-group mr-2"></i>
+                        Connect with Clients Across Every Channel
+                    </div>
+                </div>
+                <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-white opacity-70">
+                    <i class="fas fa-chevron-down text-xl"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: The Problem -->
+        <section class="slide bg-white" id="slide2">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 slide-title">The Problem</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="problem-card bg-gray-50 p-8 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-semibold text-red-800 mb-6 flex items-center">
+                            <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                            ETF Managers Face Challenges
+                        </h3>
+                        <ul class="space-y-6 text-lg text-gray-700">
+                            <li class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                                <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-4 flex-shrink-0">
+                                    <i class="fas fa-random"></i>
+                                </div>
+                                <span>Disconnected channels create inconsistent client experiences</span>
+                            </li>
+                            <li class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                                <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-4 flex-shrink-0">
+                                    <i class="fas fa-balance-scale"></i>
+                                </div>
+                                <span>Strict regulatory environment with severe compliance penalties</span>
+                            </li>
+                            <li class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                                <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-4 flex-shrink-0">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </div>
+                                <span>Information overload makes timely communication difficult</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="problem-card bg-gray-50 p-8 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-semibold text-red-800 mb-6 flex items-center">
+                            <i class="fas fa-times-circle text-red-500 mr-3"></i>
+                            Current Solutions Fall Short
+                        </h3>
+                        <ul class="space-y-6 text-lg text-gray-700">
+                            <li class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                                <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-4 flex-shrink-0">
+                                    <i class="fas fa-puzzle-piece"></i>
+                                </div>
+                                <span>Siloed systems manage each channel separately</span>
+                            </li>
+                            <li class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                                <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-4 flex-shrink-0">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <span>Manual content creation can't scale across channels</span>
+                            </li>
+                            <li class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                                <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-4 flex-shrink-0">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                                <span>Compliance checks slow down multi-channel communication</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Our Solution -->
+        <section class="slide bg-gray-50" id="slide3">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 slide-title">Agentic Intelligence Solution</h2>
+                <div class="bg-white rounded-xl shadow-xl p-8 mb-10 highlight-box">
+                    <div class="mb-8 text-center">
+                        <div class="inline-block p-4 rounded-full bg-red-50 text-red-600 mb-4">
+                            <i class="fas fa-brain text-4xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-red-800 mb-6">AI-Powered ETF Intelligence Platform</h3>
+                        <div class="h-1 w-20 bg-red-300 mx-auto mb-6"></div>
+                        <p class="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
+                            Autonomous system that proactively manages client communication, ensures compliance, and delivers personalized insights across all channels.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                        <div class="solution-feature bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                            <div class="text-red-500 text-3xl mb-4">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h4 class="font-bold text-xl text-red-800 mb-3">Autonomous Operations</h4>
+                            <p class="text-gray-700">
+                                AI agents continuously monitor markets, analyze data, and automatically generate compliant content
+                            </p>
+                        </div>
+                        <div class="solution-feature bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                            <div class="text-red-500 text-3xl mb-4">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4 class="font-bold text-xl text-red-800 mb-3">Proactive Compliance</h4>
+                            <p class="text-gray-700">
+                                Real-time regulatory checks and automated risk assessment across all communications
+                            </p>
+                        </div>
+                        <div class="solution-feature bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                            <div class="text-red-500 text-3xl mb-4">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h4 class="font-bold text-xl text-red-800 mb-3">Intelligent Distribution</h4>
+                            <p class="text-gray-700">
+                                Smart content adaptation and delivery based on channel-specific requirements
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Value Flow Diagram -->
+                <div class="bg-white p-8 rounded-xl shadow-lg mt-8">
+                    <h3 class="text-2xl font-bold text-center mb-8">How Our AI Creates Value</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                        <!-- Step 1 -->
+                        <div class="bg-red-50 p-6 rounded-lg relative">
+                            <div class="absolute -top-3 left-4 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+                            <h4 class="font-bold mb-2 mt-2">Data Ingestion</h4>
+                            <p class="text-sm">AI continuously monitors market data, regulatory updates, and client interactions</p>
+                            <i class="fas fa-arrow-right absolute right-0 top-1/2 transform -translate-y-1/2 text-red-400 hidden md:block"></i>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="bg-red-50 p-6 rounded-lg relative">
+                            <div class="absolute -top-3 left-4 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+                            <h4 class="font-bold mb-2 mt-2">Intelligent Processing</h4>
+                            <p class="text-sm">Autonomous analysis and content generation with compliance checks</p>
+                            <i class="fas fa-arrow-right absolute right-0 top-1/2 transform -translate-y-1/2 text-red-400 hidden md:block"></i>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="bg-red-50 p-6 rounded-lg relative">
+                            <div class="absolute -top-3 left-4 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+                            <h4 class="font-bold mb-2 mt-2">Smart Distribution</h4>
+                            <p class="text-sm">Automated channel optimization and personalized delivery</p>
+                            <i class="fas fa-arrow-right absolute right-0 top-1/2 transform -translate-y-1/2 text-red-400 hidden md:block"></i>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="bg-red-50 p-6 rounded-lg relative">
+                            <div class="absolute -top-3 left-4 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
+                            <h4 class="font-bold mb-2 mt-2">Value Creation</h4>
+                            <p class="text-sm">Enhanced client experience, reduced risks, improved efficiency</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Client Value Impact -->
+        <section class="slide bg-white" id="slide4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 slide-title">Measurable Client Impact</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-gradient-to-r from-red-50 to-red-100 p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-red-800 mb-6">Immediate Benefits</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center bg-white bg-opacity-90 p-4 rounded-lg">
+                                <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mr-4">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold">60% Faster Updates</span>
+                                    <p class="text-sm text-gray-600">Real-time market insights delivery</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center bg-white bg-opacity-90 p-4 rounded-lg">
+                                <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mr-4">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold">99.9% Compliance Rate</span>
+                                    <p class="text-sm text-gray-600">Automated regulatory adherence</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center bg-white bg-opacity-90 p-4 rounded-lg">
+                                <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mr-4">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold">85% More Personalized</span>
+                                    <p class="text-sm text-gray-600">AI-driven content customization</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-red-50 to-red-100 p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-red-800 mb-6">Long-Term Value</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center bg-white bg-opacity-90 p-4 rounded-lg">
+                                <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mr-4">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold">40% Higher Engagement</span>
+                                    <p class="text-sm text-gray-600">Across all communication channels</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center bg-white bg-opacity-90 p-4 rounded-lg">
+                                <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mr-4">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold">25% Cost Reduction</span>
+                                    <p class="text-sm text-gray-600">In client communication operations</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center bg-white bg-opacity-90 p-4 rounded-lg">
+                                <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mr-4">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold">92% Client Satisfaction</span>
+                                    <p class="text-sm text-gray-600">Based on automated feedback analysis</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- AI-Driven Feedback Loop -->
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-6">Continuous Improvement Cycle</h3>
+                    <div class="relative p-4">
+                        <div class="flex flex-wrap justify-center items-center gap-4">
+                            <div class="bg-red-50 p-4 rounded-lg text-center w-64">
+                                <i class="fas fa-analytics text-red-600 text-2xl mb-2"></i>
+                                <h4 class="font-bold">Data Collection</h4>
+                                <p class="text-sm">Continuous monitoring of client interactions</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-red-400 transform rotate-90 md:rotate-0"></i>
+                            <div class="bg-red-50 p-4 rounded-lg text-center w-64">
+                                <i class="fas fa-brain text-red-600 text-2xl mb-2"></i>
+                                <h4 class="font-bold">AI Analysis</h4>
+                                <p class="text-sm">Pattern recognition and insight generation</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-red-400 transform rotate-90 md:rotate-0"></i>
+                            <div class="bg-red-50 p-4 rounded-lg text-center w-64">
+                                <i class="fas fa-robot text-red-600 text-2xl mb-2"></i>
+                                <h4 class="font-bold">Automated Optimization</h4>
+                                <p class="text-sm">Self-improving communication strategies</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Value Proposition -->
+        <section class="slide bg-gray-50" id="slide5">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 slide-title">Value Proposition</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="value-card bg-white p-8 rounded-xl shadow-lg border-t-4 border-red-600">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-chart-pie text-red-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-red-800">For ETF Managers</h3>
+                        </div>
+                        <ul class="space-y-5">
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">70% Time Savings</span>
+                                    <p class="text-gray-600">Reduction in multi-channel content creation time</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">Consistent Brand Voice</span>
+                                    <p class="text-gray-600">Unified messaging across all touchpoints</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">90% Compliance Accuracy</span>
+                                    <p class="text-gray-600">With comprehensive cross-channel audit trail</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">Unified Analytics</span>
+                                    <p class="text-gray-600">Complete visibility across all client interactions</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="value-card bg-white p-8 rounded-xl shadow-lg border-t-4 border-red-600">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-user-tie text-red-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-red-800">For ETF Investors</h3>
+                        </div>
+                        <ul class="space-y-5">
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-sync-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">Channel Consistency</span>
+                                    <p class="text-gray-600">Receive uniform information across preferred channels</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">Seamless Transitions</span>
+                                    <p class="text-gray-600">Between digital and advisor interactions</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">Personalized Experience</span>
+                                    <p class="text-gray-600">Tailored insights regardless of contact method</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-red-100 h-8 w-8 rounded-full flex items-center justify-center text-red-600 mr-3 mt-1">
+                                    <i class="fas fa-search-dollar"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-gray-800">Informed Decisions</span>
+                                    <p class="text-gray-600">Make better investments with timely, accurate data</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">ROI Metrics <span class="text-red-600"><i class="fas fa-chart-line ml-2"></i></span></h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="metric-card p-6 bg-gradient-to-br from-red-50 to-white rounded-xl border border-red-100 text-center">
+                            <div class="text-5xl font-extrabold text-red-600 mb-2 flex justify-center">
+                                <span>45</span><span class="text-2xl self-start mt-2">%</span>
+                            </div>
+                            <div class="h-1 w-12 bg-red-200 mx-auto mb-3"></div>
+                            <p class="text-gray-700 font-medium">Increase in Client Engagement</p>
+                        </div>
+                        <div class="metric-card p-6 bg-gradient-to-br from-red-50 to-white rounded-xl border border-red-100 text-center">
+                            <div class="text-5xl font-extrabold text-red-600 mb-2 flex justify-center">
+                                <span>65</span><span class="text-2xl self-start mt-2">%</span>
+                            </div>
+                            <div class="h-1 w-12 bg-red-200 mx-auto mb-3"></div>
+                            <p class="text-gray-700 font-medium">Reduction in Compliance Issues</p>
+                        </div>
+                        <div class="metric-card p-6 bg-gradient-to-br from-red-50 to-white rounded-xl border border-red-100 text-center">
+                            <div class="text-5xl font-extrabold text-red-600 mb-2 flex justify-center">
+                                <span>3.2</span><span class="text-2xl self-start mt-2">x</span>
+                            </div>
+                            <div class="h-1 w-12 bg-red-200 mx-auto mb-3"></div>
+                            <p class="text-gray-700 font-medium">ROI Within First Year</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Market Opportunity -->
+        <section class="slide bg-white" id="slide6">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 slide-title">Market Opportunity</h2>
+                
+                <div class="bg-gradient-to-r from-red-50 to-red-100 p-8 rounded-xl shadow-lg mb-10">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-white p-3 rounded-full mr-4 shadow-md">
+                            <i class="fas fa-bullseye text-red-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-red-800">Target Market</h3>
+                    </div>
+                    <p class="text-gray-700 mb-8 text-lg">
+                        Our initial focus is on the <span class="font-bold">450+ mid-sized ETF managers</span> with $500M-$10B AUM who lack enterprise-scale resources but face the same regulatory and communication challenges as larger firms.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="metric-card p-6 bg-white rounded-xl shadow-md text-center">
+                            <div class="inline-block bg-red-100 p-3 rounded-full mb-4">
+                                <i class="fas fa-globe text-red-600 text-xl"></i>
+                            </div>
+                            <div class="text-4xl font-extrabold text-red-600 mb-2">$1.2B</div>
+                            <div class="h-1 w-12 bg-red-200 mx-auto mb-3"></div>
+                            <p class="text-gray-700 font-medium">Serviceable Available Market</p>
+                        </div>
+                        <div class="metric-card p-6 bg-white rounded-xl shadow-md text-center">
+                            <div class="inline-block bg-red-100 p-3 rounded-full mb-4">
+                                <i class="fas fa-chart-pie text-red-600 text-xl"></i>
+                            </div>
+                            <div class="text-4xl font-extrabold text-red-600 mb-2">$380M</div>
+                            <div class="h-1 w-12 bg-red-200 mx-auto mb-3"></div>
+                            <p class="text-gray-700 font-medium">Serviceable Obtainable Market</p>
+                        </div>
+                        <div class="metric-card p-6 bg-white rounded-xl shadow-md text-center">
+                            <div class="inline-block bg-red-100 p-3 rounded-full mb-4">
+                                <i class="fas fa-chart-line text-red-600 text-xl"></i>
+                            </div>
+                            <div class="text-4xl font-extrabold text-red-600 mb-2">28%</div>
+                            <div class="h-1 w-12 bg-red-200 mx-auto mb-3"></div>
+                            <p class="text-gray-700 font-medium">Target Market CAGR</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg mb-6">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-red-800">Industry Pain Points We Solve</h3>
+                    </div>
+                    <ul class="space-y-6">
+                        <li class="flex items-start p-4 border-l-4 border-red-500 bg-red-50 rounded-r-lg">
+                            <div class="bg-white h-10 w-10 rounded-full flex items-center justify-center text-red-600 mr-4 shadow-md">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div>
+                                <span class="text-lg text-gray-800">ETF market growing at <span class="font-bold text-red-600">15% CAGR</span>, but client communication infrastructure lags behind</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-4 border-l-4 border-red-500 bg-red-50 rounded-r-lg">
+                            <div class="bg-white h-10 w-10 rounded-full flex items-center justify-center text-red-600 mr-4 shadow-md">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <div>
+                                <span class="text-lg text-gray-800">Regulatory enforcement actions up <span class="font-bold text-red-600">32% since 2022</span>, but compliance tools remain channel-specific</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-4 border-l-4 border-red-500 bg-red-50 rounded-r-lg">
+                            <div class="bg-white h-10 w-10 rounded-full flex items-center justify-center text-red-600 mr-4 shadow-md">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <div>
+                                <span class="text-lg text-gray-800"><span class="font-bold text-red-600">72% of ETF managers</span> cite multi-channel compliance as their biggest communication challenge</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Investment Opportunity -->
+        <section class="slide animated-gradient text-white" id="slide7">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-5xl font-bold mb-10 text-center">Investment Opportunity</h2>
+                
+                <div class="bg-white bg-opacity-10 p-10 rounded-xl backdrop-filter backdrop-blur-sm mb-12 shadow-xl">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+                        <div class="transform transition-all duration-500 hover:scale-110">
+                            <div class="text-5xl font-extrabold mb-3 flex justify-center items-center">
+                                <i class="fas fa-dollar-sign mr-2 text-3xl text-red-300"></i>
+                                <span>3.8</span>
+                                <span class="text-2xl self-start mt-2">M</span>
+                            </div>
+                            <div class="h-1 w-16 bg-red-300 mx-auto mb-4"></div>
+                            <p class="opacity-90 text-lg font-medium">Seed Round</p>
+                        </div>
+                        <div class="transform transition-all duration-500 hover:scale-110">
+                            <div class="text-5xl font-extrabold mb-3 flex justify-center items-center">
+                                <i class="fas fa-calendar-alt mr-2 text-3xl text-red-300"></i>
+                                <span>18</span>
+                            </div>
+                            <div class="h-1 w-16 bg-red-300 mx-auto mb-4"></div>
+                            <p class="opacity-90 text-lg font-medium">Month Runway</p>
+                        </div>
+                        <div class="transform transition-all duration-500 hover:scale-110">
+                            <div class="text-5xl font-extrabold mb-3 flex justify-center items-center">
+                                <i class="fas fa-dollar-sign mr-2 text-3xl text-red-300"></i>
+                                <span>18</span>
+                                <span class="text-2xl self-start mt-2">M</span>
+                            </div>
+                            <div class="h-1 w-16 bg-red-300 mx-auto mb-4"></div>
+                            <p class="opacity-90 text-lg font-medium">Projected ARR Year 3</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white bg-opacity-10 p-8 rounded-xl backdrop-filter backdrop-blur-sm shadow-lg transform transition-all duration-500 hover:translate-y-(-5px)">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-white p-3 rounded-full mr-4 shadow-md">
+                                <i class="fas fa-hand-holding-usd text-red-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Use of Funds</h3>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-center p-3 bg-white bg-opacity-10 rounded-lg">
+                                <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center text-red-600 mr-4 shadow-md">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                <div>
+                                    <span class="text-lg">Engineering team expansion</span>
+                                    <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-2">
+                                        <div class="bg-white h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                    <span class="text-sm opacity-80 ml-auto">60%</span>
+                                </div>
+                            </li>
+                            <li class="flex items-center p-3 bg-white bg-opacity-10 rounded-lg">
+                                <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center text-red-600 mr-4 shadow-md">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div>
+                                    <span class="text-lg">Sales and marketing</span>
+                                    <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-2">
+                                        <div class="bg-white h-2 rounded-full" style="width: 25%"></div>
+                                    </div>
+                                    <span class="text-sm opacity-80 ml-auto">25%</span>
+                                </div>
+                            </li>
+                            <li class="flex items-center p-3 bg-white bg-opacity-10 rounded-lg">
+                                <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center text-red-600 mr-4 shadow-md">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <div>
+                                    <span class="text-lg">Operations and compliance</span>
+                                    <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-2">
+                                        <div class="bg-white h-2 rounded-full" style="width: 15%"></div>
+                                    </div>
+                                    <span class="text-sm opacity-80 ml-auto">15%</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 p-8 rounded-xl backdrop-filter backdrop-blur-sm shadow-lg transform transition-all duration-500 hover:translate-y-(-5px)">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-white p-3 rounded-full mr-4 shadow-md">
+                                <i class="fas fa-flag-checkered text-red-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Key Milestones</h3>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start p-4 bg-white bg-opacity-10 rounded-lg">
+                                <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center text-red-600 mr-4 shadow-md flex-shrink-0">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <div>
+                                    <div class="text-lg font-bold mb-1">Q2 2025: MVP Launch</div>
+                                    <p class="opacity-80">5 pilot customers with tested platform</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start p-4 bg-white bg-opacity-10 rounded-lg">
+                                <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center text-red-600 mr-4 shadow-md flex-shrink-0">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <div class="text-lg font-bold mb-1">Q4 2025: General Release</div>
+                                    <p class="opacity-80">Full platform availability to all customers</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start p-4 bg-white bg-opacity-10 rounded-lg">
+                                <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center text-red-600 mr-4 shadow-md flex-shrink-0">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <div class="text-lg font-bold mb-1">Q2 2026: Series A</div>
+                                    <p class="opacity-80">Fundraising for expansion and new features</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="btn-primary inline-block text-xl transform transition-all duration-500 hover:scale-110">
+                        <i class="fas fa-handshake mr-2"></i>
+                        Transform ETF Client Touchpoints With Us
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slideContainer = document.getElementById('slideContainer');
+            const progressBar = document.getElementById('progressBar');
+            const navigation = document.getElementById('navigation');
+            const slides = document.querySelectorAll('.slide');
+            
+            if (!slideContainer || !progressBar || !navigation || !slides.length) {
+                console.error('Required elements not found');
+                return;
+            }
+            
+            // Set first slide as active
+            slides[0].classList.add('active');
+            
+            // Create navigation dots with ARIA labels
+            slides.forEach((slide, index) => {
+                const dot = document.createElement('button');
+                dot.classList.add('nav-dot');
+                dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+                if (index === 0) {
+                    dot.classList.add('active');
+                    dot.setAttribute('aria-current', 'true');
+                }
+                dot.addEventListener('click', () => {
+                    slide.scrollIntoView({ behavior: 'smooth' });
+                });
+                navigation.appendChild(dot);
+            });
+            
+            const navDots = document.querySelectorAll('.nav-dot');
+            
+            // Throttle scroll handler for better performance
+            let ticking = false;
+            
+            // Update progress bar and active dot on scroll, and handle slide animations
+            const handleScroll = () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const scrollPosition = slideContainer.scrollTop;
+                        const maxScroll = slideContainer.scrollHeight - slideContainer.clientHeight;
+                        const scrollPercentage = Math.min(100, Math.max(0, (scrollPosition / maxScroll) * 100));
+                        
+                        progressBar.style.width = `${scrollPercentage}%`;
+                        
+                        // Update active dot and slide visibility
+                        slides.forEach((slide, index) => {
+                            const slideTop = slide.offsetTop;
+                            const slideHeight = slide.offsetHeight;
+                            
+                            if (
+                                scrollPosition >= slideTop - slideHeight / 3 &&
+                                scrollPosition < slideTop + slideHeight - slideHeight / 3
+                            ) {
+                                // Update nav dots
+                                navDots.forEach(dot => {
+                                    dot.classList.remove('active');
+                                    dot.setAttribute('aria-current', 'false');
+                                });
+                                navDots[index].classList.add('active');
+                                navDots[index].setAttribute('aria-current', 'true');
+                                
+                                // Update slide visibility for animations
+                                slides.forEach(s => s.classList.remove('active'));
+                                slide.classList.add('active');
+                            }
+                        });
+                        
+                        ticking = false;
+                    });
+                    
+                    ticking = true;
+                }
+            };
+            
+            // Initial call to set correct state
+            setTimeout(handleScroll, 100);
+            
+            // Add scroll event listener with passive option for better performance
+            slideContainer.addEventListener('scroll', handleScroll, { passive: true });
+            
+            // Add keyboard navigation
+            slideContainer.addEventListener('keydown', function(e) {
+                let currentIndex = Array.from(navDots).findIndex(dot => dot.classList.contains('active'));
+                
+                if (e.key === 'ArrowDown' && currentIndex < slides.length - 1) {
+                    e.preventDefault();
+                    slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                if (e.key === 'ArrowUp' && currentIndex > 0) {
+                    e.preventDefault();
+                    slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+            
+            // Add touch navigation with error handling
+            let touchStartY = 0;
+            let touchEndY = 0;
+            const minSwipeDistance = 50;
+            
+            slideContainer.addEventListener('touchstart', function(e) {
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+            
+            slideContainer.addEventListener('touchend', function(e) {
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipe();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeDistance = touchEndY - touchStartY;
+                let currentIndex = Array.from(navDots).findIndex(dot => dot.classList.contains('active'));
+                
+                if (Math.abs(swipeDistance) < minSwipeDistance) return;
+                
+                if (swipeDistance < 0 && currentIndex < slides.length - 1) {
+                    // Swipe up - go to next slide
+                    slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                if (swipeDistance > 0 && currentIndex > 0) {
+                    // Swipe down - go to previous slide
+                    slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            // Handle window resize
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleScroll, 100);
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>
